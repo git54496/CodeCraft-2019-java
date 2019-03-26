@@ -11,6 +11,13 @@ class Road{
     private String endID = "-1";
     private int isDual = 0;
 
+    private boolean isUseable = true; //当前道路是否可用
+
+    private int GAMEOVER = 100; //拥塞临界点的基础值
+    private int jamValue = 0; //交通拥塞值
+    private int jamValueParam = 1; //交通拥塞值的系数
+    private int overValue = 100;
+
     private boolean isFree ;
 
     private ArrayList<Lane> lanes = new ArrayList<>(); //车道编号和我们的比赛要求相同
@@ -28,10 +35,44 @@ class Road{
         endID = ei;
         isDual = isd;
 
+        overValue = GAMEOVER * laneNum; //车道越多，越能容纳车子
 
         for(int i = 0; i< laneNum; i++)
             lanes.add(new Lane(length));
 
+    }
+
+    public boolean isUseable() {
+        return isUseable;
+    }
+
+    public void setUseable(boolean useable) {
+        isUseable = useable;
+    }
+
+    public int getOverValue() {
+        return overValue;
+    }
+
+    public void setOverValue(int overValue) {
+        this.overValue = overValue;
+    }
+
+    public int getJamValue() {
+        return jamValue;
+    }
+
+    //这里传进来的参数是变动值，+1，或者-1
+    public void updateJamValue(int alter) {
+        this.jamValue = this.jamValue + alter*jamValueParam;
+    }
+
+    public int getJamValueParam() {
+        return jamValueParam;
+    }
+
+    public void setJamValueParam(int jamValueParam) {
+        this.jamValueParam = jamValueParam;
     }
 
     public String toString() {

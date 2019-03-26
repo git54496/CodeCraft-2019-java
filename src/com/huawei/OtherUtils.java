@@ -81,7 +81,7 @@ public class OtherUtils {
         int roadIDInt = Integer.parseInt(roadID);
 
 
-        if(!roadID.equals("-1"))
+        if(!roadID.equals("-1") && InputData.roadMap.get(roadIDInt).isUseable())
         {
             road = InputData.roadMap.get(roadIDInt);
             if(road.getIsDual()==1){
@@ -96,7 +96,7 @@ public class OtherUtils {
         roadID = startCross.getEast();
         roadIDInt = Integer.parseInt(roadID);
 
-        if(!roadID.equals("-1"))
+        if(!roadID.equals("-1") && InputData.roadMap.get(roadIDInt).isUseable())
         {
             road = InputData.roadMap.get(roadIDInt);
             if(road.getIsDual()==1){
@@ -110,7 +110,7 @@ public class OtherUtils {
         roadID = startCross.getSouth();
         roadIDInt = Integer.parseInt(roadID);
 
-        if(!roadID.equals("-1"))
+        if(!roadID.equals("-1") && InputData.roadMap.get(roadIDInt).isUseable())
         {
             road = InputData.roadMap.get(roadIDInt);
             if(road.getIsDual()==1){
@@ -125,7 +125,7 @@ public class OtherUtils {
         roadID = startCross.getWest();
         roadIDInt = Integer.parseInt(roadID);
 
-        if(!roadID.equals("-1"))
+        if(!roadID.equals("-1")&& InputData.roadMap.get(roadIDInt).isUseable())
         {
             road = InputData.roadMap.get(roadIDInt);
             if(road.getIsDual()==1){

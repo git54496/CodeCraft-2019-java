@@ -90,7 +90,7 @@ public class AStar {
             closeList.add(minFNode);
 
             //获取当前找到的最小的F值节点的邻居,等待一会儿遍历，更新他们的F值，并加入openList中
-            ArrayList<Integer> neighbors = minFNode.getNeighborNodes();
+            ArrayList<Integer> neighbors = getRealNeighbor(minFNode,minFNode.getNeighborNodes());
 
             for (Integer neighborId : neighbors) {
 
@@ -124,6 +124,21 @@ public class AStar {
         return null;
 
     }
+
+    private ArrayList<Integer> getRealNeighbor(Node minFNode, ArrayList<Integer> neighborNodes) {
+        ArrayList<Integer> realNeighbors = neighborNodes;
+        Node curNode ;
+        for(int i= 0;i<neighborNodes.size();i++)
+        {
+            curNode = nodes.get(i);
+            if(OtherUtils.getLinkRoadID(minFNode.getNodeID(),curNode.getNodeID()).equals("0"))
+                neighborNodes.remove(i);
+        }
+
+        return realNeighbors;
+    }
+
+
 
     public Node findMinFNode() {
         Node curNode = openList.get(0);
