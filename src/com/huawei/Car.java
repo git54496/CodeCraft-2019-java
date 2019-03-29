@@ -127,10 +127,15 @@ class Car implements Comparable<Car>{
     }
 
     //用A*算法计算，并计算耗时
-    public void dispatch(){
+    public boolean dispatch(){
         AStar aStar = new AStar();
         path = aStar.dispatch(this);
+        if(path == null)
+            return false;
+
         calDispatchTime();
+
+        return true;
     }
 
     private void calDispatchTime(){

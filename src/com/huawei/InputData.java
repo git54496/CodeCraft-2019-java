@@ -17,6 +17,7 @@ public class InputData {
 	public static HashMap<Integer, Road> roadMap = new HashMap<Integer, Road>();
 	public static HashMap<Integer, Car> carMap = new HashMap<Integer, Car>();
 
+
 	
 	public static void inputData(String[] args ) {
 		String car_path = args[0];

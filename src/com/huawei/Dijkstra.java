@@ -1,7 +1,6 @@
 package com.huawei;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 /*
  * 单源最短路径算法
@@ -33,10 +32,10 @@ public class Dijkstra {
 
 			hasMarkedCrossIndex[i]=0;
 
-			real_speed = Graph.limit_speed[start_place_index][i] > carSpeed ? carSpeed : Graph.limit_speed[start_place_index][i];
-			dis[i] = (Graph.road_length[start_place_index][i] + real_speed - 1) / real_speed;	// 上取整
+			real_speed = getRealSpeed(start_place_index,i,carSpeed);
+			dis[i] = getRealDis(start_place_index,i,carSpeed,real_speed);
 
-			if(Graph.road_length[start_place_index][i] != Integer.MAX_VALUE) {
+			if(Graph.road_length[start_place_index][i] != Integer.MAX_VALUE && isRoadUseable(start_place_index,i)) {
 				path[i] = start_place_id + "," + OtherUtils.indexToCrossId(i);
 			}
 			else {
@@ -72,7 +71,7 @@ public class Dijkstra {
 			hasMarkedCrossIndex[tempIndex]=1;
 			markedCrossNum++;
 			//这边获取当前找到的路口的所有出边ID
-			neighborIDs = InputData.crossMap.get(OtherUtils.indexToCrossId(tempIndex)).getNeighborCrossIds();
+			neighborIDs = getRealNeighbor(tempIndex);
 
 
 			for(int i = 0 ; i< neighborIDs.size();i++)
@@ -92,6 +91,73 @@ public class Dijkstra {
 
 		}
 
+	}
+
+	private static ArrayList<Integer> getRealNeighbor(int tempIndex) {
+		ArrayList<Integer> oldNeighbors = InputData.crossMap.get(OtherUtils.indexToCrossId(tempIndex)).getNeighborCrossIds();
+
+		ArrayList<Integer> realNeighbors = (ArrayList<Integer>) oldNeighbors.clone();
+		Cross startCross = InputData.crossMap.get(OtherUtils.indexToCrossId(tempIndex));
+		Cross endCross;
+
+
+		for(int i= 0;i<realNeighbors.size();i++)
+		{
+			endCross = InputData.crossMap.get(realNeighbors.get(i));
+//			if(i==3&&realNeighbors.size()==3)
+//				System.out.printf("sas");
+
+			if(OtherUtils.getLinkRoadID(startCross.getCrossID(),endCross.getCrossID()).equals("0"))
+			{
+				realNeighbors.remove(i);
+				i--;
+			}
+		}
+
+		return realNeighbors;
+	}
+
+	private static boolean isRoadUseable(int start_place_index, int i) {
+		String startCrossID = String.valueOf(OtherUtils.indexToCrossId(start_place_index));
+		String endCrossID = String.valueOf(OtherUtils.indexToCrossId(i));
+		String roadID = OtherUtils.getLinkRoadID(startCrossID,endCrossID);
+
+		int roadIDint = Integer.parseInt(roadID);
+
+
+		if(roadID.equals("0"))
+			return false;
+
+		Road road = InputData.roadMap.get(roadIDint);
+
+		if(road.isUseable())
+			return true;
+		else
+			return false;
+	}
+
+	private static int getRealDis(int start_place_index,int i,int carSpeed,int real_speed) {
+		if(real_speed!=0)
+			return (Graph.road_length[start_place_index][i] + real_speed - 1) / real_speed;	// 上取整
+		else
+			return Integer.MAX_VALUE;
+	}
+
+	private static int getRealSpeed(int start_place_index,int i,int carSpeed) {
+		String startCrossID = String.valueOf(OtherUtils.indexToCrossId(start_place_index));
+		String endCrossID = String.valueOf(OtherUtils.indexToCrossId(i));
+		String roadID = OtherUtils.getLinkRoadID(startCrossID,endCrossID);
+		int roadIDint = Integer.parseInt(roadID);
+
+		if(roadID.equals("0"))
+			return 0;
+
+		Road road = InputData.roadMap.get(roadIDint);
+
+		if(road.isUseable())
+			return Graph.limit_speed[start_place_index][i] > carSpeed ? carSpeed : Graph.limit_speed[start_place_index][i];
+		else
+			return 0;//速度为0，即这条路不可行
 	}
 
 
