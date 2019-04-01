@@ -13,10 +13,10 @@ class Road{
 
     private boolean isUseable = true; //当前道路是否可用
 
-    private int GAMEOVER = 50; //拥塞临界点的基础值
+    private int GAMEOVER = 350; //拥塞临界点的基础值
     private int jamValue = 0; //交通拥塞值
     private int jamValueParam = 1; //交通拥塞值的系数
-    private int overValue = 200;
+    private double overValue = 0;
 
     private boolean isFree ;
 
@@ -45,9 +45,10 @@ class Road{
     public boolean isUseable() {
 //        if(roadID.equals("5004")&&jamValue==1)
 //            return false;
-//        if(roadID.equals("5046")||roadID.equals("5053")||roadID.equals("5045")||roadID.equals("5039"))
-//            if(jamValue*jamValueParam > overValue/2)
-//                return false;
+        if(roadID.equals("5879")||roadID.equals("5190")||roadID.equals("5347")||roadID.equals("6913")
+        ||roadID.equals("5647")||roadID.equals("6371")||roadID.equals("6539")||roadID.equals("6272"))
+            if(jamValue*jamValueParam > overValue/2)
+                return false;
 
         if(jamValue*jamValueParam > overValue)
             return false;
@@ -60,7 +61,7 @@ class Road{
         isUseable = useable;
     }
 
-    public int getOverValue() {
+    public double getOverValue() {
         return overValue;
     }
 

@@ -33,7 +33,7 @@ public class Main {
 
     //简单分批调度，每次发100辆车，每当有一辆车到终点，就发新的一辆车,现在在road上添加一个jamValue值，当jamValue值超过GAMEOVER值，该路径消去
     private static void easyDispatch3(String[] args) throws Exception {
-        int BATCH = 700;  //每一批次
+        int BATCH = 2000;  //每一批次
         int t = 1;  //这里作为时间片，一直向上增
         int laterTime = 1;
         int temp=0;
@@ -50,6 +50,7 @@ public class Main {
             if(carArriveTimeQueue.size() == BATCH)
                 break;
 
+//            System.out.println("curT:" + t);
             Car curCar = carList.get(i).getValue();
 
             //此时有车已经到达，还原地图
@@ -66,7 +67,7 @@ public class Main {
             {
 
                 if (!curCar.dispatch()) {
-                    System.out.println("curT:" + t + "  car:" + curCar.getCarID() + "  cant reach.");
+//                    System.out.println("curT:" + t + "  car:" + curCar.getCarID() + "  cant reach.");
                     curCar.setInStartTime(curCar.getInStartTime() + laterTime);
                     Collections.sort(carList, new Comparator<Map.Entry<Integer, Car>>() {
                         @Override
@@ -101,6 +102,8 @@ public class Main {
             //此时有车子已经到达终点且最近一辆车的规定出发时间小于当前时间，发新车
             if (carArriveTimeQueue.peek()!=null && t >= carArriveTimeQueue.peek().getArrivalTime() && t >= carList.get(i).getValue().getInStartTime()) {
 
+//                System.out.println("new car arrive t:"+t);
+
                 int arriveCarID = Integer.parseInt(carArriveTimeQueue.peek().getCarID());
                 Car arriveCar = InputData.carMap.get(arriveCarID);
 
@@ -114,7 +117,7 @@ public class Main {
                 //就是当前车子无法到达终点，那么他的inStartTime++，然后重新对carList排序
                 if(!curCar.dispatch())
                 {
-                    System.out.println("new car:"+curCar.getCarID()+"  cant reach.");
+//                    System.out.println("new car:"+curCar.getCarID()+"  cant reach.");
                     curCar.setInStartTime(curCar.getInStartTime()+laterTime);
                     Collections.sort(carList, new Comparator<Map.Entry<Integer, Car>>() {
                         @Override
@@ -147,7 +150,7 @@ public class Main {
         }
 
 
-        System.out.println("curT:"+t);
+//        System.out.println("curT:"+t);
         OtherUtils.charOutStream(carList, args);
 
     }
